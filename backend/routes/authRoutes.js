@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { register, login, getMe } from '../controllers/authController.js';
+import { register, login, getMe, updateRole } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import generateToken from '../utils/generateToken.js';
 import '../config/passport.js'; // Initialize strategy
@@ -23,5 +23,7 @@ router.get('/google/callback',
         res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`);
     }
 );
+
+router.patch('/role', protect, updateRole);
 
 export default router;
