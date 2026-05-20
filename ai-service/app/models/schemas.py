@@ -22,3 +22,9 @@ class AnalysisRequest(BaseModel):
 class BulkRankRequest(BaseModel):
     jd_text: str
     resumes: List[dict] # Expected format: [{"id": "1", "text": "..."}]
+
+class CoverLetterRequest(BaseModel):
+    resume_text: str
+    jd_text: str
+    company: str
+    role: str

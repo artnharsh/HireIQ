@@ -36,3 +36,13 @@ export const getFullAnalysis = async (resumeText, jdText) => {
     });
     return response.data; // The JSON object from Groq
 };
+
+export const generateCoverLetter = async (resumeText, jdText, company, role) => {
+    const response = await aiClient.post('/generate/cover-letter', {
+        resume_text: resumeText,
+        jd_text: jdText,
+        company: company,
+        role: role
+    });
+    return response.data; // { cover_letter: "..." }
+};

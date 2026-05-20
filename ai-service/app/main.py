@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import analyze, match
+from app.api.routes import analyze, match, generate 
 
 app = FastAPI(
     title="HireIQ AI Service",
@@ -20,6 +21,7 @@ app.add_middleware(
 # Include routers
 app.include_router(analyze.router, prefix="/analyze", tags=["Analyze"])
 app.include_router(match.router, prefix="/match", tags=["Match"])
+app.include_router(generate.router, prefix="/generate", tags=["Generate"])
 
 @app.get("/")
 async def root():
