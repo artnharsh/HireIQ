@@ -4,6 +4,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Onboarding from './pages/Onboarding';
+import ResumeAnalysis from './pages/ResumeAnalysis';
 
 // A simple protected route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -35,7 +36,13 @@ function App() {
                             <div className="p-8">Dashboard coming Day 3/5...</div>
                         </ProtectedRoute>
                     } />
-                    
+
+                    <Route path="/resume-analysis" element={
+                        <ProtectedRoute>
+                            <ResumeAnalysis />
+                        </ProtectedRoute>
+                    } />
+
                     {/* 404 Fallback - Send to Landing Page */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

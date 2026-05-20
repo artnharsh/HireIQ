@@ -1,6 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from app.services.parser import extract_text_from_pdf, extract_text_from_docx
 from app.services.skill_extractor import extract_skills
+from app.services.analyzer import full_analysis
+from app.models.schemas import AnalysisRequest
 from app.core.security import verify_api_key
 
 router = APIRouter()
@@ -25,3 +27,11 @@ async def parse_resume(file: UploadFile = File(...)):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.post("/full", dependencies=[Depends(verify_api_key)])
+async def analyze_full(request: AnalysisRequest):
+    try:
+        analysis_result = full_analysis(request.resume_text, request.jd_text)
+        return analysis_result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
