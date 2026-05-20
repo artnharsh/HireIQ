@@ -3,13 +3,15 @@ import mongoose from 'mongoose';
 const applicationSchema = new mongoose.Schema({
     candidateId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
-    status: { 
-        type: String, 
+    status: {
+        type: String,
         enum: ['saved', 'applied', 'screening', 'interview', 'offer', 'rejected'],
         default: 'saved'
     },
     matchScore: { type: Number }, // Snapshot at time of application
-    notes: { type: String }
+    notes: { type: String },
+    appliedAt: { type: Date, default: Date.now },
+    resumeVersion: { type: Number, default: 1 },
 }, { timestamps: true });
 
 // Prevent duplicate applications

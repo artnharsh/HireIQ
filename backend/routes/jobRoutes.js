@@ -1,5 +1,5 @@
 import express from 'express';
-import { getJobs, postJob, seedJobs } from '../controllers/jobController.js';
+import { getJobs, postJob, seedJobs, getJobById } from '../controllers/jobController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { requireRole } from '../middleware/roleMiddleware.js';
 
@@ -10,5 +10,5 @@ router.route('/')
     .post(protect, requireRole('recruiter'), postJob);
 
 router.post('/seed', protect, seedJobs); // Remove in prod
-
+router.get('/:id', protect, getJobById);
 export default router;

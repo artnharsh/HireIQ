@@ -21,7 +21,8 @@ const jobSchema = new mongoose.Schema({
     skills: [{ type: String }],
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     deadline: { type: Date },
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    postedAt: { type: Date, default: Date.now },
 }, { timestamps: true });
 
 // Text index for fast searching across title and company

@@ -1,10 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import useAuthStore from './store/authStore';
+
+// Public Pages
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+
+// Protected Pages
 import Onboarding from './pages/Onboarding';
 import ResumeAnalysis from './pages/ResumeAnalysis';
+import JobFeedPage from './pages/JobFeedPage';
+import ApplicationTrackerPage from './pages/ApplicationTrackerPage';
 
 // A simple protected route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -30,16 +36,37 @@ function App() {
                         </ProtectedRoute>
                     } />
                     
-                    {/* Placeholder for Candidate/Recruiter Dashboards */}
-                    <Route path="/dashboard" element={
-                        <ProtectedRoute>
-                            <div className="p-8">Dashboard coming Day 3/5...</div>
-                        </ProtectedRoute>
-                    } />
-
+                    {/* Candidate Routes */}
                     <Route path="/resume-analysis" element={
                         <ProtectedRoute>
                             <ResumeAnalysis />
+                        </ProtectedRoute>
+                    } />
+                    
+                    <Route path="/jobs" element={
+                        <ProtectedRoute>
+                            <JobFeedPage />
+                        </ProtectedRoute>
+                    } />
+                    
+                    <Route path="/tracker" element={
+                        <ProtectedRoute>
+                            <ApplicationTrackerPage />
+                        </ProtectedRoute>
+                    } />
+                    
+                    {/* Placeholder for Candidate/Recruiter Dashboards */}
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                            <div className="p-8">
+                                <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+                                <p className="text-slate-400 mb-4">Navigate to your features:</p>
+                                <ul className="space-y-2 text-indigo-400 underline">
+                                    <li><a href="/resume-analysis">1. Resume Analysis</a></li>
+                                    <li><a href="/jobs">2. Job Feed</a></li>
+                                    <li><a href="/tracker">3. Application Tracker</a></li>
+                                </ul>
+                            </div>
                         </ProtectedRoute>
                     } />
 
