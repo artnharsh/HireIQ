@@ -46,3 +46,12 @@ export const generateCoverLetter = async (resumeText, jdText, company, role) => 
     });
     return response.data; // { cover_letter: "..." }
 };
+
+export const rankBulkResumes = async (jdText, resumes) => {
+    // resumes format: [{ id: 'url', text: 'raw_text', filename: 'file.pdf' }, ...]
+    const response = await aiClient.post('/rank/bulk', {
+        jd_text: jdText,
+        resumes: resumes
+    });
+    return response.data; // { ranked: [...], clusters: {...} }
+};

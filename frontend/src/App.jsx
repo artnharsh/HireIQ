@@ -11,6 +11,9 @@ import Onboarding from './pages/Onboarding';
 import ResumeAnalysis from './pages/ResumeAnalysis';
 import JobFeedPage from './pages/JobFeedPage';
 import ApplicationTrackerPage from './pages/ApplicationTrackerPage';
+import BulkScreening from './pages/BulkScreening';
+import PostJob from './pages/PostJob';
+import RecruiterDashboard from './pages/RecruiterDashboard';
 
 // A simple protected route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -28,33 +31,33 @@ function App() {
                     <Route path="/" element={<Landing />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
-                    
+
                     {/* Protected Routes */}
                     <Route path="/onboarding" element={
                         <ProtectedRoute>
                             <Onboarding />
                         </ProtectedRoute>
                     } />
-                    
+
                     {/* Candidate Routes */}
                     <Route path="/resume-analysis" element={
                         <ProtectedRoute>
                             <ResumeAnalysis />
                         </ProtectedRoute>
                     } />
-                    
+
                     <Route path="/jobs" element={
                         <ProtectedRoute>
                             <JobFeedPage />
                         </ProtectedRoute>
                     } />
-                    
+
                     <Route path="/tracker" element={
                         <ProtectedRoute>
                             <ApplicationTrackerPage />
                         </ProtectedRoute>
                     } />
-                    
+
                     {/* Placeholder for Candidate/Recruiter Dashboards */}
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
@@ -70,6 +73,9 @@ function App() {
                         </ProtectedRoute>
                     } />
 
+                    <Route path="/recruiter/bulk-screen" element={<ProtectedRoute><BulkScreening /></ProtectedRoute>} />
+                    <Route path="/recruiter/post-job" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
+                    <Route path="/recruiter/dashboard" element={<ProtectedRoute><RecruiterDashboard /></ProtectedRoute>} />
                     {/* 404 Fallback - Send to Landing Page */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

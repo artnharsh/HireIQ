@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-class ResumeText(BaseModel):
+class ResumeItem(BaseModel):
+    id: str
     text: str
+    filename: str
 
 class JDMatchRequest(BaseModel):
     resume_text: str
@@ -21,7 +23,7 @@ class AnalysisRequest(BaseModel):
 
 class BulkRankRequest(BaseModel):
     jd_text: str
-    resumes: List[dict] # Expected format: [{"id": "1", "text": "..."}]
+    resumes: List[ResumeItem]
 
 class CoverLetterRequest(BaseModel):
     resume_text: str
