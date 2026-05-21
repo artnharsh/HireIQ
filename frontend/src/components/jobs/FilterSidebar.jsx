@@ -3,20 +3,19 @@ import useJobStore from '../../store/jobStore';
 import { JOB_TYPES, EXPERIENCE_LEVELS, WORK_MODES, DOMAINS } from '../../constants/filterOptions';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-// Reusable Collapsible Wrapper
 const CollapsibleSection = ({ title, children, defaultOpen = true }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div className="mb-6">
+        <div className="mb-8">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 hover:text-slate-300 transition-colors"
+                className="w-full flex items-center justify-between text-[11px] font-black text-sage-400 dark:text-sage-500 uppercase tracking-widest mb-4 hover:text-sage-900 dark:hover:text-sage-50 transition-colors"
             >
                 {title}
                 {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
-            {isOpen && <div className="space-y-2 animate-in slide-in-from-top-2 duration-200">{children}</div>}
+            {isOpen && <div className="space-y-3.5 animate-in slide-in-from-top-2 fade-in duration-200">{children}</div>}
         </div>
     );
 };
@@ -35,25 +34,28 @@ const FilterSidebar = () => {
     const CheckboxGroup = ({ category, options }) => (
         <>
             {options.map(option => (
-                <label key={option} className="flex items-center gap-3 cursor-pointer group">
+                <label key={option} className="flex items-center gap-4 cursor-pointer group">
                     <input
                         type="checkbox"
                         checked={filters[category].includes(option)}
                         onChange={() => handleCheckbox(category, option)}
-                        className="w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-600 bg-slate-900"
+                        className="w-4 h-4 rounded border-sage-300 dark:border-sage-600 accent-sage-900 dark:accent-sage-100 bg-transparent cursor-pointer transition-all"
                     />
-                    <span className="text-sm text-slate-300">{option}</span>
+                    <span className="text-sm font-medium text-sage-600 dark:text-sage-400 group-hover:text-sage-900 dark:group-hover:text-sage-50 transition-colors">{option}</span>
                 </label>
             ))}
         </>
     );
 
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 h-fit sticky top-6 overflow-y-auto max-h-[85vh] scrollbar-thin scrollbar-thumb-slate-700">
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold">Filters</h2>
-                <button onClick={clearFilters} className="text-xs text-indigo-400 hover:text-indigo-300">
-                    Clear All
+        <div className="w-full font-sans">
+            <div className="flex items-center justify-between mb-10 pb-4 border-b border-sage-200/60 dark:border-sage-800/60">
+                <h2 className="text-sm font-black uppercase tracking-widest text-sage-900 dark:text-sage-50">Filter Roles</h2>
+                <button 
+                    onClick={clearFilters} 
+                    className="text-xs font-bold text-sage-400 hover:text-sage-900 dark:hover:text-sage-100 transition-colors"
+                >
+                    Clear
                 </button>
             </div>
 
@@ -66,17 +68,17 @@ const FilterSidebar = () => {
             </CollapsibleSection>
 
             <CollapsibleSection title="Experience">
-                <div className="space-y-2">
+                <div className="space-y-3.5">
                     {EXPERIENCE_LEVELS.map(option => (
-                        <label key={option} className="flex items-center gap-3 cursor-pointer group">
+                        <label key={option} className="flex items-center gap-4 cursor-pointer group">
                             <input
                                 type="radio"
                                 name="experienceFilter"
                                 checked={filters.experience.includes(option)}
-                                onChange={() => setFilters({ experience: [option] })} // Arrays override for radio
-                                className="w-4 h-4 text-indigo-600 bg-slate-900 border-slate-600 focus:ring-indigo-600"
+                                onChange={() => setFilters({ experience: [option] })}
+                                className="w-4 h-4 border-sage-300 dark:border-sage-600 accent-sage-900 dark:accent-sage-100 bg-transparent cursor-pointer"
                             />
-                            <span className="text-sm text-slate-300">{option}</span>
+                            <span className="text-sm font-medium text-sage-600 dark:text-sage-400 group-hover:text-sage-900 dark:group-hover:text-sage-50 transition-colors">{option}</span>
                         </label>
                     ))}
                 </div>
@@ -84,48 +86,13 @@ const FilterSidebar = () => {
 
             <CollapsibleSection title="Domain">
                 <select
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-white dark:bg-sage-900 border border-sage-200 dark:border-sage-800 rounded-lg px-4 py-3 text-sm font-bold text-sage-900 dark:text-sage-50 focus:outline-none focus:border-sage-400 cursor-pointer shadow-sm"
                     onChange={(e) => setFilters({ domain: e.target.value ? [e.target.value] : [] })}
                     value={filters.domain[0] || ''}
                 >
                     <option value="">All Domains</option>
                     {DOMAINS.map(d => <option key={d} value={d}>{d}</option>)}
                 </select>
-            </CollapsibleSection>
-
-            <CollapsibleSection title="Salary Range (Min/Max)">
-                <div className="flex items-center gap-2">
-                    <input
-                        type="number"
-                        placeholder="Min"
-                        className="w-1/2 bg-slate-950 border border-slate-800 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200"
-                        onChange={(e) => setFilters({ salary_min: e.target.value })}
-                        value={filters.salary_min || ''}
-                    />
-                    <span className="text-slate-500">-</span>
-                    <input
-                        type="number"
-                        placeholder="Max"
-                        className="w-1/2 bg-slate-950 border border-slate-800 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200"
-                        onChange={(e) => setFilters({ salary_max: e.target.value })}
-                        value={filters.salary_max || ''}
-                    />
-                </div>
-            </CollapsibleSection>
-
-            <CollapsibleSection title="Date Posted" defaultOpen={false}>
-                {['Any time', 'Past 24 hours', 'Past week', 'Past month'].map(time => (
-                    <label key={time} className="flex items-center gap-3 cursor-pointer group">
-                        <input
-                            type="radio"
-                            name="datePosted"
-                            checked={filters.datePosted === time}
-                            onChange={() => setFilters({ datePosted: time })}
-                            className="w-4 h-4 text-indigo-600 bg-slate-900 border-slate-600 focus:ring-indigo-600"
-                        />
-                        <span className="text-sm text-slate-300">{time}</span>
-                    </label>
-                ))}
             </CollapsibleSection>
         </div>
     );
