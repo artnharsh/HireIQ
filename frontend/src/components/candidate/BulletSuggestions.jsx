@@ -1,44 +1,61 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import useResumeStore from '../../store/resumeStore';
-import { Lightbulb, Copy } from 'lucide-react';
+import { Copy, Check, ArrowRight } from 'lucide-react';
 
 const BulletSuggestions = () => {
     const { currentAnalysis } = useResumeStore();
-    if (!currentAnalysis) return null;
+    const [copiedIndex, setCopiedIndex] = useState(null);
 
+    if (!currentAnalysis) return null;
     const { bullet_suggestions } = currentAnalysis.analysis;
 
-    const copyToClipboard = (text) => {
+    const handleCopy = (text, index) => {
         navigator.clipboard.writeText(text);
-        // We will add toast notifications in Day 6, for now it just copies
+        setCopiedIndex(index);
+        setTimeout(() => setCopiedIndex(null), 2000);
     };
 
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 mt-6">
-            <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-amber-400">
-                <Lightbulb className="w-5 h-5" /> Resume Bullet Rewrites
-            </h3>
-            <div className="space-y-4">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-white/80 dark:bg-sage-900/50 backdrop-blur-xl border border-sage-200 dark:border-sage-800 rounded-[2rem] p-8 md:p-10 shadow-sm h-full font-sans"
+        >
+            <h3 className="text-xl font-black mb-8 text-sage-900 dark:text-sage-50 tracking-tight">Bullet Optimization</h3>
+
+            <div className="space-y-6">
                 {bullet_suggestions.map((bullet, i) => (
-                    <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-950 p-4 rounded-lg border border-slate-800 relative group">
-                        <div>
-                            <span className="text-xs font-bold text-red-400 mb-1 block">CURRENT BULLET</span>
-                            <p className="text-sm text-slate-400 line-through decoration-red-900/50">{bullet.before}</p>
-                        </div>
-                        <div>
-                            <span className="text-xs font-bold text-emerald-400 mb-1 block">AI SUGGESTION (TAILORED FOR JD)</span>
-                            <p className="text-sm text-slate-200">{bullet.after}</p>
-                        </div>
+                    <div key={i} className="bg-sage-50/50 dark:bg-sage-950/50 rounded-2xl p-6 border border-sage-200/60 dark:border-sage-800/60 relative group/card transition-colors hover:bg-sage-100/50 dark:hover:bg-sage-900/80">
+                        
                         <button 
-                            onClick={() => copyToClipboard(bullet.after)}
-                            className="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
-                            title="Copy suggestion"
+                            onClick={() => handleCopy(bullet.after, i)}
+                            className="absolute top-4 right-4 p-2 bg-white dark:bg-sage-800 border border-sage-200 dark:border-sage-700 text-sage-900 dark:text-sage-50 rounded-lg opacity-0 group-hover/card:opacity-100 transition-all shadow-sm hover:scale-105"
                         >
-                            <Copy className="w-4 h-4 text-slate-300" />
+                            {copiedIndex === i ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                         </button>
+
+                        <div className="flex flex-col md:flex-row gap-6 pr-8">
+                            {/* Original */}
+                            <div className="flex-1 opacity-60">
+                                <span className="text-[10px] font-black text-sage-500 block uppercase tracking-widest mb-3">Original</span>
+                                <p className="text-sm font-medium text-sage-600 dark:text-sage-400 line-through decoration-sage-400 dark:decoration-sage-600 leading-relaxed">{bullet.before}</p>
+                            </div>
+                            
+                            {/* Divider Arrow */}
+                            <div className="hidden md:flex items-center justify-center shrink-0">
+                                <ArrowRight className="w-5 h-5 text-sage-300 dark:text-sage-700" />
+                            </div>
+
+                            {/* Tailored */}
+                            <div className="flex-1">
+                                <span className="text-[10px] font-black text-sage-900 dark:text-sage-50 block uppercase tracking-widest mb-3">Tailored</span>
+                                <p className="text-sm md:text-base font-bold text-sage-900 dark:text-sage-50 leading-relaxed">{bullet.after}</p>
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
-        </div>
+        </motion.div>
     );
 };
 

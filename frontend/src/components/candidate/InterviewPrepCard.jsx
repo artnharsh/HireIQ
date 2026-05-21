@@ -1,5 +1,5 @@
+import { motion } from 'framer-motion';
 import useResumeStore from '../../store/resumeStore';
-import { MessageSquare } from 'lucide-react';
 
 const InterviewPrepCard = () => {
     const { currentAnalysis } = useResumeStore();
@@ -7,28 +7,29 @@ const InterviewPrepCard = () => {
 
     const { interview_questions } = currentAnalysis.analysis;
 
-    const getTypeColor = (type) => {
-        if (type.toLowerCase().includes('technical')) return 'bg-blue-900/50 text-blue-300 border-blue-800';
-        if (type.toLowerCase().includes('behavioral')) return 'bg-purple-900/50 text-purple-300 border-purple-800';
-        return 'bg-indigo-900/50 text-indigo-300 border-indigo-800';
-    };
-
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 mt-6">
-            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-indigo-400" /> AI Interview Prep
-            </h3>
-            <div className="space-y-3">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }}
+            className="bg-white/80 dark:bg-sage-900/50 backdrop-blur-xl border border-sage-200 dark:border-sage-800 rounded-[2rem] p-8 md:p-10 shadow-sm h-full font-sans"
+        >
+            <h3 className="text-xl font-black mb-8 text-sage-900 dark:text-sage-50 tracking-tight">Interview Prep</h3>
+
+            <div className="space-y-4">
                 {interview_questions.map((q, i) => (
-                    <div key={i} className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                        <span className={`text-[10px] font-bold px-2 py-1 rounded border uppercase tracking-wider whitespace-nowrap ${getTypeColor(q.type)}`}>
+                    <div 
+                        key={i} 
+                        className="bg-sage-50/50 dark:bg-sage-950/50 p-6 rounded-2xl border border-sage-200/60 dark:border-sage-800/60 flex flex-col gap-4 items-start transition-all hover:bg-sage-100/50 dark:hover:bg-sage-900/80"
+                    >
+                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-sage-300 dark:border-sage-700 text-sage-600 dark:text-sage-400">
                             {q.type}
                         </span>
-                        <p className="text-sm text-slate-200">{q.question}</p>
+                        <p className="text-sm md:text-base text-sage-900 dark:text-sage-50 font-semibold leading-relaxed">
+                            {q.question}
+                        </p>
                     </div>
                 ))}
             </div>
-        </div>
+        </motion.div>
     );
 };
 

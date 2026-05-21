@@ -1,51 +1,78 @@
+import { motion } from 'framer-motion';
 import useResumeStore from '../../store/resumeStore';
+import { Target } from 'lucide-react';
 
 const MatchScoreCard = () => {
     const { currentAnalysis } = useResumeStore();
     if (!currentAnalysis) return null;
 
-    // Extract score from top level, and skills/summary from the nested analysis object
     const { score, analysis } = currentAnalysis;
     const { matched_skills = [], missing_skills = [], summary = '' } = analysis || {};
 
-    const scoreColor = score >= 75 ? 'text-emerald-400' : score >= 41 ? 'text-amber-400' : 'text-red-400';
-
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left">
-                <h2 className="text-2xl font-bold mb-1">Match Score</h2>
-                <p className="text-sm text-slate-400 max-w-md">{summary}</p>
-            </div>
-            
-            <div className="flex flex-col items-center">
-                <div className={`text-6xl font-black ${scoreColor}`}>
-                    {Math.round(score)}%
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-white/80 dark:bg-sage-900/50 backdrop-blur-xl border border-sage-200 dark:border-sage-800 rounded-[2rem] p-8 md:p-12 shadow-sm font-sans"
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                
+                {/* Left Side: Score & Summary */}
+                <div className="lg:col-span-5 flex flex-col justify-center text-center lg:text-left">
+                    <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
+                        <div className="p-3 rounded-2xl bg-sage-100 dark:bg-sage-800 border border-sage-200 dark:border-sage-700">
+                            <Target className="w-6 h-6 text-sage-900 dark:text-sage-50" />
+                        </div>
+                        <h2 className="text-xl font-black text-sage-900 dark:text-sage-50 tracking-tight">Calibration Score</h2>
+                    </div>
+                    
+                    <div className="mb-6">
+                        <span className="text-8xl md:text-9xl font-black tracking-tighter leading-none text-sage-900 dark:text-sage-50">
+                            {Math.round(score)}<span className="text-5xl md:text-6xl text-sage-300 dark:text-sage-700">%</span>
+                        </span>
+                    </div>
+                    
+                    <p className="text-sage-600 dark:text-sage-400 font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
+                        {summary}
+                    </p>
                 </div>
-            </div>
+                
+                {/* Right Side: Skills Breakdown */}
+                <div className="lg:col-span-7 flex flex-col justify-center gap-10 border-t lg:border-t-0 lg:border-l border-sage-200/60 dark:border-sage-800/60 pt-10 lg:pt-0 lg:pl-12">
+                    
+                    {/* Matched Skills (Solid, High Contrast) */}
+                    <div>
+                        <h3 className="text-[11px] font-black text-sage-400 dark:text-sage-500 uppercase tracking-widest mb-4">Acquired Competencies</h3>
+                        {matched_skills.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {matched_skills.map(skill => (
+                                    <span key={skill} className="px-3 py-1.5 bg-white dark:bg-sage-800 text-sage-900 dark:text-sage-50 border border-sage-200 dark:border-sage-700 text-xs font-bold rounded-lg shadow-sm">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm font-medium text-sage-500">No overlapping skills detected.</p>
+                        )}
+                    </div>
 
-            <div className="flex-1 w-full flex flex-col gap-3">
-                <div>
-                    <span className="text-xs font-semibold text-slate-500 tracking-wider">MATCHED SKILLS</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                        {matched_skills.map(skill => (
-                            <span key={skill} className="px-2 py-0.5 bg-emerald-950/30 text-emerald-400 border border-emerald-900/50 text-[10px] rounded uppercase tracking-wider">
-                                {skill}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <div>
-                    <span className="text-xs font-semibold text-slate-500 tracking-wider">MISSING SKILLS</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                        {missing_skills.map(skill => (
-                            <span key={skill} className="px-2 py-0.5 bg-red-950/30 text-red-400 border border-red-900/50 text-[10px] rounded uppercase tracking-wider">
-                                {skill}
-                            </span>
-                        ))}
+                    {/* Missing Skills (Dashed, Muted) */}
+                    <div>
+                        <h3 className="text-[11px] font-black text-sage-400 dark:text-sage-500 uppercase tracking-widest mb-4">Identified Gaps</h3>
+                        {missing_skills.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {missing_skills.map(skill => (
+                                    <span key={skill} className="px-3 py-1.5 bg-sage-50/50 dark:bg-sage-900/30 text-sage-500 dark:text-sage-400 border border-dashed border-sage-300 dark:border-sage-700 text-xs font-semibold rounded-lg">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm font-medium text-sage-500">No critical gaps identified.</p>
+                        )}
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
